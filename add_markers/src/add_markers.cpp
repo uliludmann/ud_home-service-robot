@@ -37,7 +37,7 @@
 int state_ = 0;
 
 void odomChecker(const nav_msgs::Odometry::ConstPtr& msg) {
-	//ROS_INFO("x pos [%g]", msg -> pose.pose.position.x);
+	//ROS_INFO("odom received");
 	//if state 0 check if position 1 is reached
 	if (state_ == 0){
 	if (abs(msg -> pose.pose.position.x - 0.0)< 0.05 ) {
@@ -59,7 +59,7 @@ void odomChecker(const nav_msgs::Odometry::ConstPtr& msg) {
 		}
 	}
 	}
-			
+	//ROS_INFO("%d", state_);
 	
 }
     
@@ -81,9 +81,7 @@ int main( int argc, char** argv )
   uint32_t shape = visualization_msgs::Marker::CUBE;
 // %EndTag(SHAPE_INIT)%
 
-// %Tag(MARKER_INIT)%
-  while (ros::ok())
-  {
+
     visualization_msgs::Marker marker1;
     // Set the frame ID and timestamp.  See the TF tutorials for information on these.
     marker1.header.frame_id = "/map";
@@ -171,23 +169,35 @@ visualization_msgs::Marker marker2;
     marker2.color.g = 1.0f;
     marker2.color.b = 0.0f;
     marker2.color.a = 1.0;
-    marker2.lifetime = ros::Duration();
+    marker2.lifetime = ros::Duration();   
+    
+    
+    
+    
+    while(ros::ok()){
     //simple statemachine
-switch (state_){ 
+	switch (state_){ 
     case 0:
     	marker_pub.publish(marker1);
+    		ROS_INFO("CASE 0");
     	break;
     case 1:
-    marker1.action = visualization_msgs::Marker::DELETE;
-    marker_pub.publish(marker1);
-    	marker_pub.publish(marker2);
+    ros::Duration(5.0).sleep()
+    	marker1.action = visualization_msgs::Marker::DELETE;
+    	marker_pub.publish(marker1);
+    		ROS_INFO("CASE 1");
     	break;
+    case 2:
+    ros::Duration(0.5).sleep();
+      marker_pub.publish(marker2);
+      ROS_INFO("CASE 2");
+      break;
     }
-
-// %Tag(SLEEP_END)%
-    r.sleep();
-    ros::spin();
-  }
-// %EndTag(SLEEP_END)%
+    ros::spinOnce();
+ }
+    
+    
+	
+  
 }
 // %EndTag(FULLTEXT)%
