@@ -182,10 +182,10 @@ visualization_msgs::Marker marker2;
     		ROS_INFO("CASE 0");
     	break;
     case 1:
-    ros::Duration(5.0).sleep()
+    ros::Duration(5.0).sleep();
     	marker1.action = visualization_msgs::Marker::DELETE;
     	marker_pub.publish(marker1);
-    		ROS_INFO("CASE 1");
+    	ROS_INFO("CASE 1");
     	break;
     case 2:
     ros::Duration(0.5).sleep();
